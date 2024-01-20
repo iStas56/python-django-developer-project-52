@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% load django_bootstrap5 %}
+
+{# Load CSS and JavaScript #}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+{% load i18n %}
+
+{% block content %}
+<h1 class="h1 my-4">
+    {% translate "Log in" %}
+</h1>
+<form method="post">
+    {% csrf_token %}
+    <div class="form-error">
+        {{ form.non_field_errors }}
+    </div>
+    {% for f in form %}
+    <div class="mb-3">
+        <label class="form-label" for="{{ f.id_for_label }}">{{f.label}}:</label>
+        {{ f }}
+    </div>
+    {% endfor %}
+    <button type="submit" class="btn btn-primary">{% translate "Log in" %}</button>
+</form>
+{% endblock content %}

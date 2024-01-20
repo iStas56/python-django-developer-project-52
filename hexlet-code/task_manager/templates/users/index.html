@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% translate 'Users' %}{% endblock title %}
+
+{% block content %}
+<h1>{% translate 'Users' %}</h1>
+<table class="mt-4 table table-bordered table-striped table-hover">
+    <thead class="thead-dark">
+    <tr>
+        <th>id</th>
+        <th>{% translate 'Users' %}</th>
+        <th>{% translate 'Fullname' %}</th>
+        <th>{% translate 'Date create' %}</th>
+        <th>{% translate 'Action' %}</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for user in users %}
+    <tr>
+        <td>{{ user.id }}</td>
+        <td>{{ user.username }}</td>
+        <td>{{ user.first_name }} {{ user.last_name }}</td>
+        <td>{{ user.date_joined|date:"d.m.Y H:i" }}</td>
+        <td>
+            <a href="{% url 'update' pk=user.id %}" class="btn btn-primary">{% translate 'Change' %}</a>
+            <form method="post" action="{% url 'delete' pk=user.id %}" style="display: inline;">
+                {% csrf_token %}
+                <input type="submit" value="{% translate 'Delete' %}" class="btn btn-danger">
+            </form>
+        </td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endblock content %}
