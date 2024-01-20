@@ -16,7 +16,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv('SECRET_KEY', 'default_secret_key')
 DEBUG = os.getenv('DEBUG', 'False')
 
-ALLOWED_HOSTS = ['webserver', '127.0.0.1', 'localhost', 'stanley-ajax-python.onrender.com']
+ALLOWED_HOSTS = ['webserver', '127.0.0.1', 'localhost', 'stanley-ajax-tm.onrender.com']
 
 # Application definition
 
