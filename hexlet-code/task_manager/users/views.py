@@ -16,8 +16,6 @@ from django.utils.translation import gettext_lazy as _
 class IndexView(View):
     def get(self, request, *args, **kwargs):
         users = User.objects.all()
-        for user in users:
-            print(user.date_joined)
         return render(request, 'users/index.html', context={'users': users})
 
 
