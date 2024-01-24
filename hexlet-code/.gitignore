@@ -1,11 +1,9 @@
 # Игнорировать файлы и директории Django
-task_manager/__pycache__/
-*.pyc
-
-# Игнорировать папку кеша Django
-cache/
-
-db.sqlite3
-../.DS_Store
 .DS_Store
-.idea/.DS_Store
+__pycache__/
+*.pyc
+*.sqlite
+.github/
+../.DS_Store
+./.DS_Store
+db.sqlite3
