@@ -23,3 +23,4 @@ class CreateTaskForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(CreateTaskForm, self).__init__(*args, **kwargs)
         self.fields['executor'].required = False
+        self.fields['executor'].label_from_instance = lambda obj: obj.get_full_name()

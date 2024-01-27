@@ -1,6 +1,7 @@
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
+from django.db.models import ProtectedError
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
 from .models import TaskStatus
@@ -65,6 +66,14 @@ class DeleteStatus(LoginRequiredMixin, View):
     def post(self, request, *args, **kwargs):
         status_pk = kwargs.get('pk')
         status = get_object_or_404(TaskStatus, pk=status_pk)
-        status.delete()
+
+        try:
+            status.delete()
+        except ProtectedError:
+            messages.error(request, _("Cannot delete status it's in use"))
+            return redirect('tasks')
+
         messages.success(request, self.success_message)
         return redirect('statuses')
+
+

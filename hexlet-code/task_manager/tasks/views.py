@@ -67,6 +67,11 @@ class DeleteTask(LoginRequiredMixin, View):
     def post(self, request, *args, **kwargs):
         task_pk = kwargs.get('pk')
         task = get_object_or_404(Task, pk=task_pk)
+
+        if request.user.id != task.creator_by.id:
+            messages.error(request, _('Only its author can delete a task'))
+            return redirect('tasks')
+
         task.delete()
         messages.success(request, self.success_message)
         return redirect('tasks')

@@ -295,5 +295,11 @@ msgstr "Название"
 msgid "Cannot delete user because it's in use"
 msgstr "Невозможно удалить пользователя, потому что он используется"
 
+msgid "Cannot delete status it's in use"
+msgstr "Невозможно удалить статус, потому что он используется"
+
+msgid "Only its author can delete a task"
+msgstr "Задачу может удалить только ее автор"
+
 #~ msgid "Me"
 #~ msgstr "Я"
