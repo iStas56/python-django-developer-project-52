@@ -3,6 +3,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.contrib.auth.models import User
 from django.contrib.messages.views import SuccessMessageMixin
+from django.db.models import ProtectedError
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
 from django.views import View
@@ -63,8 +64,26 @@ class UpdateUser(SuccessMessageMixin, UserPassesTestMixin, View):
         return render(request, self.template_name, {'form': form})
 
 
-class DeleteUser(SuccessMessageMixin, DeleteView):
+class DeleteUser(UserPassesTestMixin, SuccessMessageMixin, DeleteView):
     model = User
     template_name = 'index.html'
     success_url = reverse_lazy('users')
     success_message = _('User successfully deleted')
+
+    def test_func(self):
+        # Определяем логику: разрешаем удаление только администраторам или самому пользователю
+        user_pk = self.kwargs.get('pk')
+        return self.request.user.pk == user_pk or self.request.user.is_superuser
+
+    def handle_no_permission(self):
+        # Если у пользователя нет прав на удаление, показываем сообщение об ошибке
+        messages.error(self.request, _("You do not have permission to change another user."))
+        return redirect('users')
+
+    # не даем удалить пользователя, если на нем есть задачи
+    def post(self, request, *args, **kwargs):
+        try:
+            return super(DeleteUser, self).post(request, *args, **kwargs)
+        except ProtectedError:
+            messages.error(request, _("Cannot delete user because it's in use"))
+            return redirect(self.success_url)

@@ -7,6 +7,7 @@ urlpatterns = [
     path('', views.IndexView.as_view(), name='main'),
     path('users/', include('task_manager.users.urls')),
     path('statuses/', include('task_manager.statuses.urls')),
+    path('tasks/', include('task_manager.tasks.urls')),
     path('login/', views.LoginUser.as_view(), name='login'),
     path('logout/', views.logout_user, name='logout'),
     path('i18n/', include('django.conf.urls.i18n')),
