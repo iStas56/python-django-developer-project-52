@@ -30,7 +30,16 @@
                         <th scope="row">{% translate 'Date create' %}</th>
                         <td>{{ task.created_at|date:"d.m.Y H:i" }}</td>
                     </tr>
-                    <!-- Метки можно добавить здесь, если они есть в вашей модели -->
+                    <tr>
+                        <th scope="row">{% translate 'Labels' %}</th>
+                        <td>
+                            <ul>
+                                {% for label in task.labels.all %}
+                                    <li>{{ label.name }}</li>
+                                {% endfor %}
+                            </ul>
+                        </td>
+                    </tr>
                     </tbody>
                 </table>
                 <a href="{% url 'update_task' task.id %}" class="btn btn-primary">{% translate 'Change' %}</a>
