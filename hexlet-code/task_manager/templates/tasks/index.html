@@ -4,35 +4,58 @@
 {% block title %}{% translate 'Tasks' %}{% endblock title %}
 
 {% block content %}
-<h1>{% translate 'Tasks' %}</h1>
+    <h1>{% translate 'Tasks' %}</h1>
 
     <a class="btn btn-primary mb-2 mt-3" href="{% url 'create_task' %}">{% translate 'Create task' %}</a>
+    <div class="bg-light p-3 border rounded">
+        <form method="get">
+            {% for field in filter.form %}
+                {% if field.name == 'executor' %}
+                    <!-- Особое отображение для поля executor -->
+                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                    <select name="{{ field.name }}" class="form-select">
+                        <option value="">---------</option>
+                        {% for choice in field.field.queryset %}
+                            <option value="{{ choice.pk }}"
+                                    {% if choice.pk|stringformat:"s" in field.value %}selected{% endif %}>
+                                {{ choice.get_full_name }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                {% else %}
+                    <!-- Стандартное отображение для всех остальных полей -->
+                    <p>{{ field.label_tag }} {{ field }}</p>
+                {% endif %}
+            {% endfor %}
+            <button class="btn btn-primary" type="submit">{% translate 'Show' %}</button>
+        </form>
+    </div>
 
-<table class="mt-4 table table-bordered table-striped table-hover">
-    <thead class="thead-dark">
-    <tr>
-        <th>id</th>
-        <th>{% translate 'Name' %}</th>
-        <th>{% translate 'Status' %}</th>
-        <th>{% translate 'Author' %}</th>
-        <th>{% translate 'Date create' %}</th>
-        <th>{% translate 'Action' %}</th>
-    </tr>
-    </thead>
-    <tbody>
-    {% for task in tasks %}
-    <tr>
-        <td>{{ task.id }}</td>
-        <td><a href="{% url 'detail_task' pk=task.id %}">{{ task.name }}</a></td>
-        <td>{{ task.status }}</td>
-        <td>{{ task.creator_by.get_full_name }}</td>
-        <td>{{ task.created_at|date:"d.m.Y H:i" }}</td>
-        <td>
-            <a href="{% url 'update_task' pk=task.id %}" class="btn btn-primary">{% translate 'Change' %}</a>
-            <a href="{% url 'delete_task' pk=task.id %}" class="btn btn-danger">{% translate 'Delete' %}</a>
-        </td>
-    </tr>
-    {% endfor %}
-    </tbody>
-</table>
+    <table class="mt-4 table table-bordered table-striped table-hover">
+        <thead class="thead-dark">
+        <tr>
+            <th>id</th>
+            <th>{% translate 'Name' %}</th>
+            <th>{% translate 'Status' %}</th>
+            <th>{% translate 'Author' %}</th>
+            <th>{% translate 'Date create' %}</th>
+            <th>{% translate 'Action' %}</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for task in filter.qs %}
+            <tr>
+                <td>{{ task.id }}</td>
+                <td><a href="{% url 'detail_task' pk=task.id %}">{{ task.name }}</a></td>
+                <td>{{ task.status }}</td>
+                <td>{{ task.creator_by.get_full_name }}</td>
+                <td>{{ task.created_at|date:"d.m.Y H:i" }}</td>
+                <td>
+                    <a href="{% url 'update_task' pk=task.id %}" class="btn btn-primary">{% translate 'Change' %}</a>
+                    <a href="{% url 'delete_task' pk=task.id %}" class="btn btn-danger">{% translate 'Delete' %}</a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
 {% endblock content %}

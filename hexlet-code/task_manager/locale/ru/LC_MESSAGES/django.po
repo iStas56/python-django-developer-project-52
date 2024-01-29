@@ -353,5 +353,8 @@ msgstr "Задача"
 msgid "Title"
 msgstr "Название"
 
+msgid "Only your tasks"
+msgstr "Только свои задачи"
+
 #~ msgid "Me"
 #~ msgstr "Я"

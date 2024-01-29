@@ -6,13 +6,15 @@ from django.views import View
 from django.utils.translation import gettext_lazy as _
 from .forms import CreateTaskForm
 from .models import Task
+from .filters import TaskFilter
 
 
 # Create your views here.
 class IndexView(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
-        tasks = Task.objects.all()
-        return render(request, 'tasks/index.html', context={'tasks': tasks})
+        filter = TaskFilter(request.GET, queryset=Task.objects.all(), request=request)
+
+        return render(request, 'tasks/index.html', context={'filter': filter})
 
 
 class CreateTask(LoginRequiredMixin, SuccessMessageMixin, View):
