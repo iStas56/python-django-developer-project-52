@@ -4,11 +4,13 @@ from django.contrib import messages
 from django.contrib.auth import logout
 from django.contrib.auth.views import LoginView
 from django.contrib.messages.views import SuccessMessageMixin
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views import View
 from .users import forms
 from django.utils.translation import gettext_lazy as _
+import rollbar
 
 
 class IndexView(View):
@@ -35,3 +37,13 @@ class LoginUser(SuccessMessageMixin, LoginView):
 def logout_user(request):
     logout(request)
     return redirect(reverse_lazy('login'))
+
+
+def test_rollbar(request):
+    try:
+        # Сгенерировать ошибку для тестирования
+        1 / 0
+    except ZeroDivisionError:
+        rollbar.report_exc_info()
+
+    return HttpResponse("Тестовое сообщение отправлено в Rollbar.")

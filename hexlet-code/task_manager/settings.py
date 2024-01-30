@@ -46,6 +46,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
+    'rollbar.contrib.django.middleware.RollbarNotifierMiddleware',
 ]
 
 ROOT_URLCONF = 'task_manager.urls'
@@ -140,4 +141,11 @@ MESSAGE_TAGS = {
 }
 
 LOGIN_URL = 'login'
+
+ROLLBAR = {
+    'access_token': os.getenv('ACCES_TOKEN_ROLLBAR'),
+    'environment': 'development' if DEBUG else 'production',
+    'code_version': '1.0',
+    'root': BASE_DIR,
+}
 #
